@@ -25,7 +25,8 @@ export default {
 
 <template>
   <RedirectTo name="home" v-if="authStore.userAuthenticated" />
-  <div class="loginFormContainer" v-else>
+  <div class="login-form-container" v-else>
+    <h2>Entrar</h2>
     <form @submit.prevent="submit">
       <div>
         <label htmlFor="input-email">Email:</label>
@@ -49,13 +50,13 @@ export default {
           v-model="password"
         />
       </div>
-      <button type="submit">Entrar</button>
+      <button type="submit">Continuar</button>
     </form>
   </div>
 </template>
 
 <style scoped>
-.loginFormContainer {
+.login-form-container {
   padding: 2rem;
   border: 1px solid var(--shadow-color);
   box-shadow: 10px 10px 0px var(--shadow-color);
@@ -64,11 +65,17 @@ export default {
   max-width: 400px;
 }
 
+h2 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
 form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
   width: 100%;
+  margin-top: 1.5rem;
 }
 
 input,
@@ -111,7 +118,7 @@ button:active {
 }
 
 @media screen and (max-width: 600px) {
-  .loginFormContainer {
+  .login-form-container {
     width: 100%;
     border: none;
     box-shadow: none;
