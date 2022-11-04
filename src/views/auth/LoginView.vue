@@ -7,12 +7,15 @@ export default {
     email: "",
     password: "",
     authError: "",
+    authLoading: false,
     authStore: useAuth(),
   }),
 
   methods: {
     async submit() {
+      this.authLoading = true;
       this.resetAuthError();
+
       if (this.email.length > 0 && this.password.length > 0) {
         const err = await this.authStore.login(this.email, this.password);
 
@@ -20,6 +23,8 @@ export default {
           this.authError = err.message;
         }
       }
+
+      this.authLoading = false;
     },
 
     resetAuthError() {
@@ -64,8 +69,16 @@ export default {
           @input="resetAuthError"
         />
       </div>
-      <button type="submit" :class="authError.length > 0 && 'button-error'">
+      <button
+        type="submit"
+        :class="
+          authError.length > 0
+            ? 'button-error'
+            : authLoading && 'button-disabled'
+        "
+      >
         <span v-if="authError.length > 0">{{ authError }}</span>
+        <span v-else-if="authLoading">...</span>
         <span v-else>Continuar</span>
       </button>
     </form>
@@ -135,6 +148,15 @@ button:active {
 
 .button-error {
   background-color: var(--error-color);
+}
+
+.button-disabled,
+.button-disabled:hover,
+.button-disabled:active {
+  opacity: 0.8;
+  box-shadow: none;
+  transform: none;
+  cursor: wait;
 }
 
 @media screen and (max-width: 600px) {
