@@ -6,13 +6,25 @@ export default {
   data: () => ({
     email: "",
     password: "",
+    authError: "",
     authStore: useAuth(),
   }),
 
   methods: {
-    submit() {
+    async submit() {
+      this.resetAuthError();
       if (this.email.length > 0 && this.password.length > 0) {
-        this.authStore.login(this.email, this.password);
+        const err = await this.authStore.login(this.email, this.password);
+
+        if (err instanceof Error) {
+          this.authError = err.message;
+        }
+      }
+    },
+
+    resetAuthError() {
+      if (this.authError.length > 0) {
+        this.authError = "";
       }
     },
   },
@@ -37,6 +49,7 @@ export default {
           id="input-email"
           placeholder="email@exemplo.com"
           v-model="email"
+          @input="resetAuthError"
         />
       </div>
       <div>
@@ -48,9 +61,13 @@ export default {
           id="input-password"
           placeholder="**********"
           v-model="password"
+          @input="resetAuthError"
         />
       </div>
-      <button type="submit">Continuar</button>
+      <button type="submit" :class="authError.length > 0 && 'button-error'">
+        <span v-if="authError.length > 0">{{ authError }}</span>
+        <span v-else>Continuar</span>
+      </button>
     </form>
   </div>
 </template>
@@ -103,18 +120,21 @@ button {
   margin-top: 1rem;
   background-color: var(--sucess-color);
   font-weight: bold;
+  transition: ease-in-out 0.1s;
 }
 
 button:hover {
   box-shadow: 4px 4px 0px var(--shadow-color);
   transform: translate(-2px, -2px);
-  transition: 0.1s;
 }
 
 button:active {
   box-shadow: 0px 0px 0px var(--shadow-color);
   transform: translate(1px, 1px);
-  transition: 0.1s;
+}
+
+.button-error {
+  background-color: var(--error-color);
 }
 
 @media screen and (max-width: 600px) {
