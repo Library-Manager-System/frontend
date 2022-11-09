@@ -1,6 +1,6 @@
 <script lang="ts">
-import ProtectedRoute from "@/components/ProtectedRoute.vue";
 import { useAuth } from "@/stores/auth";
+import ProtectedRoute from "@/components/ProtectedRoute.vue";
 
 export default {
   data: () => ({
@@ -15,6 +15,8 @@ export default {
 
 <template>
   <ProtectedRoute>
-    <h1>Página inicial</h1>
+    <code>
+      <pre>{{ authStore.userData }}</pre>
+    </code>
   </ProtectedRoute>
 </template>

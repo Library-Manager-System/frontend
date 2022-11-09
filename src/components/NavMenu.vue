@@ -18,6 +18,10 @@ export default {
         name: "home",
       },
       {
+        label: "Configurações",
+        name: "settings",
+      },
+      {
         label: "Sair",
         name: "auth.logout",
       },
