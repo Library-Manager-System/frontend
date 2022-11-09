@@ -1,5 +1,6 @@
 <script lang="ts">
 import ProtectedRoute from "@/components/ProtectedRoute.vue";
+import BookDetail from "@/components/BookDetail.vue";
 import { useAuth } from "@/stores/auth";
 
 export default {
@@ -9,12 +10,13 @@ export default {
 
   components: {
     ProtectedRoute,
+    BookDetail,
   },
 };
 </script>
 
 <template>
   <ProtectedRoute>
-    <h1>Página inicial</h1>
+    <BookDetail title="Livro" />
   </ProtectedRoute>
 </template>
