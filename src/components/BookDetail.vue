@@ -10,10 +10,22 @@ export default {
 </script>
 
 <template>
-  <span class="title">{{ title }}</span>
+  <div class="book">
+    <span class="title">{{ title }}</span>
+  </div>
 </template>
 
 <style scoped>
+.book {
+  width: 100px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--shadow-color);
+  background-color: #fff;
+}
+
 .title {
   font-weight: bold;
 }
