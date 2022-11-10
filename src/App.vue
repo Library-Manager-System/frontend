@@ -21,5 +21,6 @@ import NavBar from "@/components/NavBar.vue";
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 1rem;
 }
 </style>
