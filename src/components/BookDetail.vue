@@ -5,13 +5,23 @@ export default {
       required: true,
       type: String,
     },
+    isbn: {
+      required: true,
+      type: String,
+    },
   },
 };
 </script>
 
 <template>
   <div class="book">
-    <span class="title">{{ title }}</span>
+    <figure>
+      <img
+        :src="'https://covers.openlibrary.org/b/isbn/' + isbn + '-M.jpg'"
+        :alt="title"
+      />
+      <figcaption class="title">{{ title }}</figcaption>
+    </figure>
   </div>
 </template>
 
@@ -35,5 +45,7 @@ export default {
 
 .title {
   font-weight: bold;
+  text-align: center;
+  font-size: 1rem;
 }
 </style>

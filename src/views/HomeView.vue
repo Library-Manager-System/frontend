@@ -61,6 +61,8 @@ main {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 5px;
+  grid-gap: 1rem;
+
+  padding: 1rem;
 }
 </style>
