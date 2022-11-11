@@ -8,6 +8,7 @@ export default {
       name: "",
       email: "",
       password: "",
+      passwordConfirm: "",
       phone: "",
       address: "",
     },
@@ -22,7 +23,23 @@ export default {
       this.resetAuthError();
 
       if (Object.values(this.formData).every((data) => data.length > 0)) {
-        // Create new user
+        if (this.formData.password !== this.formData.passwordConfirm) {
+          this.authError = "As senhas precisam coincidir";
+        } else {
+          const err = await this.authStore.signup({
+            name: this.formData.name,
+            email: this.formData.email,
+            password: this.formData.password,
+            phone: this.formData.phone,
+            address: this.formData.address,
+          });
+
+          if (err instanceof Error) {
+            this.authError = err.message;
+          }
+        }
+      } else {
+        this.authError = "Preencha todos os campos";
       }
 
       this.authLoading = false;
@@ -77,6 +94,17 @@ export default {
             id="input-password"
             placeholder="**********"
             v-model="formData.password"
+            @input="resetAuthError"
+          />
+        </div>
+        <div>
+          <label htmlFor="input-password-confirm">Confirme sua senha:</label>
+          <br />
+          <input
+            type="password"
+            id="input-password-confirm"
+            placeholder="**********"
+            v-model="formData.passwordConfirm"
             @input="resetAuthError"
           />
         </div>
