@@ -4,8 +4,13 @@ import { useAuth } from "@/stores/auth";
 
 export default {
   data: () => ({
-    email: "",
-    password: "",
+    formData: {
+      name: "",
+      email: "",
+      password: "",
+      phone: "",
+      address: "",
+    },
     authError: "",
     authLoading: false,
     authStore: useAuth(),
@@ -16,12 +21,8 @@ export default {
       this.authLoading = true;
       this.resetAuthError();
 
-      if (this.email.length > 0 && this.password.length > 0) {
-        const err = await this.authStore.login(this.email, this.password);
-
-        if (err instanceof Error) {
-          this.authError = err.message;
-        }
+      if (Object.values(this.formData).every((data) => data.length > 0)) {
+        // Create new user
       }
 
       this.authLoading = false;
@@ -42,32 +43,65 @@ export default {
 
 <template>
   <RedirectTo name="home" v-if="authStore.userAuthenticated" />
-  <div class="login-form-container" v-else>
-    <h2>Entrar</h2>
+  <div class="form-container" v-else>
+    <h2>Nova conta</h2>
     <form @submit.prevent="submit">
-      <div>
-        <label htmlFor="input-email">Email:</label>
-        <br />
-        <input
-          type="email"
-          name="email"
-          id="input-email"
-          placeholder="email@exemplo.com"
-          v-model="email"
-          @input="resetAuthError"
-        />
-      </div>
-      <div>
-        <label htmlFor="input-password">Senha:</label>
-        <br />
-        <input
-          type="password"
-          name="password"
-          id="input-password"
-          placeholder="**********"
-          v-model="password"
-          @input="resetAuthError"
-        />
+      <div class="form-input-container">
+        <div>
+          <label htmlFor="input-name">Nome:</label>
+          <br />
+          <input
+            type="text"
+            id="input-name"
+            placeholder="Nome completo"
+            v-model="formData.name"
+            @input="resetAuthError"
+          />
+        </div>
+        <div>
+          <label htmlFor="input-email">Email:</label>
+          <br />
+          <input
+            type="email"
+            id="input-email"
+            placeholder="email@exemplo.com"
+            v-model="formData.email"
+            @input="resetAuthError"
+          />
+        </div>
+        <div>
+          <label htmlFor="input-password">Senha:</label>
+          <br />
+          <input
+            type="password"
+            id="input-password"
+            placeholder="**********"
+            v-model="formData.password"
+            @input="resetAuthError"
+          />
+        </div>
+        <div>
+          <label htmlFor="input-phone">Número de telefone:</label>
+          <br />
+          <input
+            type="tel"
+            id="input-phone"
+            placeholder="99999999999"
+            v-model="formData.phone"
+            @input="resetAuthError"
+          />
+        </div>
+        <div>
+          <label htmlFor="input-address">Endereço:</label>
+          <br />
+          <input
+            type="text"
+            id="input-address"
+            placeholder="..."
+            v-model="formData.address"
+            @input="resetAuthError"
+          />
+        </div>
       </div>
       <button
         type="submit"
@@ -83,20 +117,19 @@ export default {
       </button>
     </form>
     <span class="form-message">
-      Não tem uma conta?
-      <RouterLink :to="{ name: 'auth.signup' }">Inscreva-se</RouterLink>
+      Já tem uma conta?
+      <RouterLink :to="{ name: 'auth.login' }">Entre</RouterLink>
     </span>
   </div>
 </template>
 
 <style scoped>
-.login-form-container {
+.form-container {
   padding: 2rem;
   border: 1px solid var(--shadow-color);
   box-shadow: 10px 10px 0px var(--shadow-color);
   transform: translate(-5px, -5px);
-  width: 50%;
-  max-width: 400px;
+  width: 75%;
 }
 
 h2 {
@@ -110,6 +143,12 @@ form {
   gap: 1rem;
   width: 100%;
   margin-top: 1.5rem;
+}
+
+.form-input-container {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(2, 1fr);
 }
 
 input,
@@ -173,12 +212,17 @@ button:active {
   font-weight: bold;
 }
 
-@media screen and (max-width: 600px) {
-  .login-form-container {
+@media screen and (max-width: 768px) {
+  .form-container {
     width: 100%;
     border: none;
     box-shadow: none;
     transform: none;
+  }
+
+  .form-input-container {
+    gap: 1rem;
+    grid-template-columns: 1fr;
   }
 }
 </style>
