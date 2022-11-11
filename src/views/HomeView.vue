@@ -7,15 +7,18 @@ import { useAuth } from "@/stores/auth";
 export default {
   data: () => ({
     authStore: useAuth(),
-    temporaryBooks: [...Array(30).keys()].map((book) => `Livro ${book}`),
-    temporaryBooksFilter: [""],
+    temporaryBooks: [...Array(30).keys()].map((book) => ({
+      title: `Livro ${book}`,
+      isbn: "0000000000",
+    })),
+    temporaryBooksFilter: [{ title: "", isbn: "" }],
   }),
 
   methods: {
     search(searchText: string) {
       console.log(searchText);
       this.temporaryBooksFilter = this.temporaryBooks.filter((book) =>
-        book.toLowerCase().includes(searchText.toLowerCase())
+        book.title.toLowerCase().includes(searchText.toLowerCase())
       );
     },
   },
@@ -39,8 +42,8 @@ export default {
       <div class="book-container">
         <BookDetail
           v-for="book of temporaryBooksFilter"
-          :key="book"
-          :title="book"
+          :key="book.title"
+          :book="book"
         />
       </div>
     </main>
@@ -54,6 +57,8 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
+  flex-grow: 1;
   gap: 2rem;
 }
 
@@ -61,8 +66,7 @@ main {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  grid-gap: 1rem;
-
+  gap: 1rem;
   padding: 1rem;
 }
 </style>

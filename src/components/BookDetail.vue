@@ -1,13 +1,14 @@
 <script lang="ts">
+interface Book {
+  title: string;
+  isbn: string;
+}
+
 export default {
   props: {
-    title: {
+    book: {
       required: true,
-      type: String,
-    },
-    isbn: {
-      required: true,
-      type: String,
+      type: Object as () => Book,
     },
   },
 };
@@ -17,12 +18,12 @@ export default {
   <div class="book">
     <figure>
       <img
-        :src="'https://covers.openlibrary.org/b/isbn/' + isbn + '-M.jpg'"
-        :alt="title"
+        :src="'https://covers.openlibrary.org/b/isbn/' + book.isbn + '-M.jpg'"
+        :alt="book.title"
         :width="100"
         :height="150"
       />
-      <figcaption class="title">{{ title }}</figcaption>
+      <figcaption class="title">{{ book.title }}</figcaption>
     </figure>
   </div>
 </template>
