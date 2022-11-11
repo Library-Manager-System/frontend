@@ -146,7 +146,7 @@ export default {
     </form>
     <span class="form-message">
       Já tem uma conta?
-      <RouterLink :to="{ name: 'auth.login' }">Entre</RouterLink>
+      <RouterLink :to="{ name: 'auth.login' }">Entrar</RouterLink>
     </span>
   </div>
 </template>

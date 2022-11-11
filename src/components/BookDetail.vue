@@ -1,7 +1,7 @@
 <script lang="ts">
 interface Book {
-  title: string;
   isbn: string;
+  title: string;
 }
 
 export default {
@@ -15,32 +15,28 @@ export default {
 </script>
 
 <template>
-  <div class="book">
-    <figure>
-      <img
-        :src="'https://covers.openlibrary.org/b/isbn/' + book.isbn + '-M.jpg'"
-        :alt="book.title"
-        :width="100"
-        :height="150"
-      />
-      <figcaption class="title">{{ book.title }}</figcaption>
-    </figure>
-  </div>
+  <figure class="book">
+    <img
+      :src="`https://covers.openlibrary.org/b/isbn/${book.isbn}-M.jpg`"
+      :alt="book.title"
+    />
+    <figcaption class="title">{{ book.title }}</figcaption>
+  </figure>
 </template>
 
 <style scoped>
 .book {
   width: 100px;
   height: 140px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--shadow-color);
-  background-color: #fff;
-  margin-bottom: 2.7rem;
-
+  margin-bottom: 2.5rem;
   cursor: pointer;
   transition: 0.2s transform;
+  border: 1px solid var(--shadow-color);
+}
+
+.book img {
+  width: 100%;
+  height: 100%;
 }
 
 .book:hover {
