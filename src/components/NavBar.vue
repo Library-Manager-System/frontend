@@ -52,6 +52,7 @@ header {
   padding: 2rem;
   background-color: var(--bg-color-transparent);
   box-shadow: 0px 0px 1px var(--shadow-color);
+  z-index: 8;
 }
 
 .header-blur {
