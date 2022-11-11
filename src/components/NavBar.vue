@@ -31,7 +31,7 @@ export default {
 </script>
 
 <template>
-  <header>
+  <header :class="!menuOpen && 'header-blur'">
     <h1 class="title">OLMS</h1>
     <div v-if="authStore.userAuthenticated">
       <NavMenuButton @toggle-menu="toggleMenu" />
@@ -49,6 +49,13 @@ header {
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  padding: 2rem;
+  background-color: var(--bg-color-transparent);
+  box-shadow: 0px 0px 1px var(--shadow-color);
+}
+
+.header-blur {
+  backdrop-filter: saturate(180%) blur(1rem);
 }
 
 .title {

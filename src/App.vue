@@ -20,7 +20,18 @@ import NavBar from "@/components/NavBar.vue";
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: 1rem;
+}
+
+.app-root {
+  min-height: 100vh;
+  justify-content: flex-start;
+}
+
+.app-main {
+  max-width: 1200px;
+  padding: 1rem;
+  justify-content: center;
+  flex-grow: 1;
 }
 </style>

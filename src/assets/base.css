@@ -2,7 +2,7 @@
 :root {
   --text-color: #000;
   --bg-color: #fff;
-  --bg-color-transparent: rgba(255, 255, 255, 0.7);
+  --bg-color-transparent: rgba(255, 255, 255, 0.8);
   --shadow-color: rgba(0, 0, 0, 0.9);
   --sucess-color: rgb(50, 240, 80);
   --error-color: rgb(250, 100, 100);
