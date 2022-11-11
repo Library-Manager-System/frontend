@@ -4,27 +4,37 @@ import BookDetail from "@/components/BookDetail.vue";
 import SearchBar from "@/components/SearchBar.vue";
 import { useAuth } from "@/stores/auth";
 
+interface Book {
+  isbn: string;
+  title: string;
+}
+
 export default {
   data: () => ({
     authStore: useAuth(),
-    temporaryBooks: [...Array(30).keys()].map((book) => ({
-      title: `Livro ${book}`,
-      isbn: "0000000000",
-    })),
-    temporaryBooksFilter: [{ title: "", isbn: "" }],
+    books: [{ isbn: "", title: "" } as Book],
+    booksFilter: [{ isbn: "", title: "" } as Book],
   }),
 
   methods: {
     search(searchText: string) {
       console.log(searchText);
-      this.temporaryBooksFilter = this.temporaryBooks.filter((book) =>
+      this.booksFilter = this.books.filter((book) =>
         book.title.toLowerCase().includes(searchText.toLowerCase())
       );
     },
   },
 
   mounted() {
-    this.temporaryBooksFilter = this.temporaryBooks;
+    fetch(import.meta.env.VITE_API_URL + "/book")
+      .then((res) => res.json())
+      .then((json) => {
+        this.books = json.map(
+          (book: any) =>
+            ({ isbn: book.isbn_book, title: book.title_book } as Book)
+        );
+        this.booksFilter = this.books;
+      });
   },
 
   components: {
@@ -41,7 +51,7 @@ export default {
       <SearchBar @on-search="search" />
       <div class="book-container">
         <BookDetail
-          v-for="book of temporaryBooksFilter"
+          v-for="book of booksFilter"
           :key="book.title"
           :book="book"
         />
