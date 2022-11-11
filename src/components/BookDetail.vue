@@ -26,8 +26,8 @@ export default {
 
 <style scoped>
 .book {
-  width: 100px;
-  height: 140px;
+  width: 120px;
+  height: 180px;
   margin-bottom: 2.5rem;
   cursor: pointer;
   transition: 0.2s transform;
