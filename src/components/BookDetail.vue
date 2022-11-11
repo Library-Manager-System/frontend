@@ -24,6 +24,13 @@ export default {
   justify-content: center;
   border: 1px solid var(--shadow-color);
   background-color: #fff;
+
+  cursor: pointer;
+  transition: 0.2s transform;
+}
+
+.book:hover {
+  transform: scale(1.05);
 }
 
 .title {
