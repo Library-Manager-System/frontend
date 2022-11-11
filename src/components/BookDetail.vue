@@ -19,6 +19,7 @@ export default {
     <img
       :src="`https://covers.openlibrary.org/b/isbn/${book.isbn}-M.jpg`"
       :alt="book.title"
+      loading="lazy"
     />
     <figcaption class="title">{{ book.title }}</figcaption>
   </figure>
@@ -28,7 +29,7 @@ export default {
 .book {
   width: 120px;
   height: 180px;
-  margin-bottom: 2.5rem;
+  margin: 0 auto 2.5rem;
   cursor: pointer;
   transition: 0.2s transform;
   border: 1px solid var(--shadow-color);

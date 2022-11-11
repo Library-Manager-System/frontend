@@ -70,6 +70,7 @@ main {
   justify-content: flex-start;
   flex-grow: 1;
   gap: 2rem;
+
 }
 
 .book-container {
