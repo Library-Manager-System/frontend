@@ -4,8 +4,10 @@ import { useAuth } from "@/stores/auth";
 
 export default {
   data: () => ({
-    email: "",
-    password: "",
+    formData: {
+      email: "",
+      password: "",
+    },
     authError: "",
     authLoading: false,
     authStore: useAuth(),
@@ -16,12 +18,17 @@ export default {
       this.authLoading = true;
       this.resetAuthError();
 
-      if (this.email.length > 0 && this.password.length > 0) {
-        const err = await this.authStore.login(this.email, this.password);
+      if (Object.values(this.formData).every((data) => data.length > 0)) {
+        const err = await this.authStore.login({
+          email: this.formData.email,
+          password: this.formData.password,
+        });
 
         if (err instanceof Error) {
           this.authError = err.message;
         }
+      } else {
+        this.authError = "Preencha todos os campos";
       }
 
       this.authLoading = false;
@@ -50,10 +57,9 @@ export default {
         <br />
         <input
           type="email"
-          name="email"
           id="input-email"
           placeholder="email@exemplo.com"
-          v-model="email"
+          v-model="formData.email"
           @input="resetAuthError"
         />
       </div>
@@ -62,10 +68,9 @@ export default {
         <br />
         <input
           type="password"
-          name="password"
           id="input-password"
           placeholder="**********"
-          v-model="password"
+          v-model="formData.password"
           @input="resetAuthError"
         />
       </div>
