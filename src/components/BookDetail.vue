@@ -15,7 +15,10 @@ export default {
 </script>
 
 <template>
-  <figure class="book">
+  <figure
+    class="book"
+    @click="$router.push({ name: 'book', params: { isbn: book.isbn } })"
+  >
     <img
       :src="`https://covers.openlibrary.org/b/isbn/${book.isbn}-M.jpg`"
       :alt="book.title"
