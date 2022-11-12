@@ -1,4 +1,6 @@
 <script lang="ts">
+import VanillaTilt from "vanilla-tilt";
+
 export default {
   data: () => ({
     book: {
@@ -28,17 +30,21 @@ export default {
           category: json.category,
         };
       });
+
+    VanillaTilt.init(document.querySelector(".book") as HTMLElement, {
+      reverse: true,
+      max: 5,
+    });
   },
 };
 </script>
 
 <template>
   <main>
-    <div class="book">
+    <div class="book" data-tilt>
       <img
         :src="`https://covers.openlibrary.org/b/isbn/${$route.params.isbn}-L.jpg`"
         :alt="book.title"
-        :title="book.title"
       />
     </div>
     <div>

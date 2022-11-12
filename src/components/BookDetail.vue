@@ -1,4 +1,6 @@
 <script lang="ts">
+import VanillaTilt from "vanilla-tilt";
+
 interface Book {
   isbn: string;
   title: string;
@@ -10,6 +12,17 @@ export default {
       required: true,
       type: Object as () => Book,
     },
+  },
+
+  mounted() {
+    VanillaTilt.init(
+      document.querySelectorAll(".book") as unknown as HTMLElement[],
+      {
+        scale: 1.05,
+        reverse: true,
+        max: 10,
+      }
+    );
   },
 };
 </script>
@@ -34,8 +47,9 @@ export default {
   height: 180px;
   margin: 0 auto 2.5rem;
   cursor: pointer;
-  transition: 0.2s transform;
   border: 1px solid var(--shadow-color);
+  box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+    0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 10px 10px rgba(0, 0, 0, 0.06);
 }
 
 .book img {
@@ -43,15 +57,10 @@ export default {
   height: 100%;
 }
 
-.book:hover {
-  transform: scale(1.05);
-}
-
 .title {
   font-weight: bold;
   text-align: center;
   font-size: 1rem;
-
   margin-top: 5px;
 }
 </style>
