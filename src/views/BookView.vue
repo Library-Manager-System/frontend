@@ -10,7 +10,10 @@ export default {
       year: 0,
       synopsis: "",
       category: "",
+      copies: 0,
     },
+    loan: false,
+    loanError: "",
   }),
 
   mounted() {
@@ -28,6 +31,7 @@ export default {
           year: json.year,
           synopsis: json.synopsis,
           category: json.category,
+          copies: 1,
         };
       });
 
@@ -35,6 +39,15 @@ export default {
       reverse: true,
       max: 5,
     });
+  },
+
+  methods: {
+    newLoan() {
+      this.loan = true;
+      setTimeout(() => (this.loan = false), 2000);
+      setTimeout(() => (this.loanError = "Erro"), 2000);
+      setTimeout(() => (this.loanError = ""), 5000);
+    },
   },
 };
 </script>
@@ -55,8 +68,20 @@ export default {
         <li><strong>Editora: </strong>{{ book.publisher }}</li>
         <li><strong>Ano de publicação: </strong>{{ book.year }}</li>
         <li><strong>Sinopse: </strong>{{ book.synopsis }}</li>
-        <li><strong>Categorias: </strong>{{ book.category }}</li>
+        <li><strong>Categoria: </strong>{{ book.category }}</li>
+        <li><strong>Cópias disponíveis: </strong>{{ book.copies }}</li>
       </ul>
+      <button
+        type="button"
+        @click="newLoan"
+        :class="
+          loanError.length > 0 ? 'button-error' : loan && 'button-disabled'
+        "
+      >
+        <span v-if="loanError.length > 0">{{ loanError }}</span>
+        <span v-else-if="loan">...</span>
+        <span v-else>Soliciar empréstimo</span>
+      </button>
     </div>
   </main>
 </template>
@@ -89,6 +114,41 @@ main {
 .book-info {
   list-style-type: none;
   padding: 0;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--shadow-color);
+  background-color: #fff;
+  box-shadow: 2px 2px 0px var(--shadow-color);
+  outline: none;
+  background-color: var(--sucess-color);
+  font-weight: bold;
+  transition: ease-in-out 0.1s;
+}
+
+button:hover {
+  box-shadow: 4px 4px 0px var(--shadow-color);
+  transform: translate(-2px, -2px);
+}
+
+button:active {
+  box-shadow: 0px 0px 0px var(--shadow-color);
+  transform: translate(1px, 1px);
+}
+
+.button-error {
+  background-color: var(--error-color);
+}
+
+.button-disabled,
+.button-disabled:hover,
+.button-disabled:active {
+  opacity: 0.8;
+  box-shadow: none;
+  transform: none;
+  cursor: wait;
 }
 
 @media screen and (max-width: 768px) {
