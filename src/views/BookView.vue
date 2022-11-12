@@ -25,12 +25,12 @@ export default {
       .then((res) => res.json())
       .then((json) => {
         this.book = {
-          title: json.title,
-          author: json.author,
-          publisher: json.publisher,
-          year: json.year,
-          synopsis: json.synopsis,
-          category: json.category,
+          title: json.title_book,
+          author: "",
+          publisher: "",
+          year: json.year_book,
+          synopsis: json.synopsis_book,
+          category: "",
           copies: 1,
         };
       });
