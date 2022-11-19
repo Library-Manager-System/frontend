@@ -1,8 +1,10 @@
 <script lang="ts">
+import { useAuth } from "@/stores/auth";
 import VanillaTilt from "vanilla-tilt";
 
 export default {
   data: () => ({
+    authStore: useAuth(),
     book: {
       title: "",
       author: "",
@@ -16,24 +18,22 @@ export default {
     loanError: "",
   }),
 
-  mounted() {
-    fetch(
-      import.meta.env.VITE_API_URL +
-        "/book/isbn?" +
-        new URLSearchParams({ isbn: this.$route.params.isbn.toString() })
-    )
-      .then((res) => res.json())
-      .then((json) => {
-        this.book = {
-          title: json.title_book,
-          author: "",
-          publisher: "",
-          year: json.year_book,
-          synopsis: json.synopsis_book,
-          category: "",
-          copies: 1,
-        };
-      });
+  async mounted() {
+    const json = await this.authStore.protectedFetch(
+      "/book/isbn?" +
+        new URLSearchParams({ isbn: this.$route.params.isbn.toString() }),
+      "GET"
+    );
+
+    this.book = {
+      title: json.title_book,
+      author: "",
+      publisher: "",
+      year: json.year_book,
+      synopsis: json.synopsis_book,
+      category: "",
+      copies: 1,
+    };
 
     VanillaTilt.init(document.querySelector(".book") as HTMLElement, {
       reverse: true,

@@ -25,16 +25,14 @@ export default {
     },
   },
 
-  mounted() {
-    fetch(import.meta.env.VITE_API_URL + "/book")
-      .then((res) => res.json())
-      .then((json) => {
-        this.books = json.map(
-          (book: any) =>
-            ({ isbn: book.isbn_book, title: book.title_book } as Book)
-        );
-        this.booksFilter = this.books;
-      });
+  async mounted() {
+    const json = await this.authStore.protectedFetch("/book", "GET");
+
+    this.books = json.map(
+      (book: any) => ({ isbn: book.isbn_book, title: book.title_book } as Book)
+    );
+
+    this.booksFilter = this.books;
   },
 
   components: {
