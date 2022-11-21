@@ -2,6 +2,7 @@
 import { useAuth } from "@/stores/auth";
 import NavMenu from "@/components/NavMenu.vue";
 import NavMenuButton from "@/components/NavMenuButton.vue";
+import { RouterLink } from "vue-router";
 
 export default {
   data: () => ({
@@ -26,13 +27,16 @@ export default {
   components: {
     NavMenuButton,
     NavMenu,
+    RouterLink,
   },
 };
 </script>
 
 <template>
   <header :class="!menuOpen && 'header-blur'">
-    <h1 class="title">OLMS</h1>
+    <RouterLink :to="{ name: 'home' }">
+      <h1 class="title">OLMS</h1>
+    </RouterLink>
     <div v-if="authStore.userAuthenticated">
       <NavMenuButton @toggle-menu="toggleMenu" />
       <NavMenu :menu-open="menuOpen" @toggle-menu="toggleMenu" />
@@ -61,5 +65,9 @@ header {
 
 .title {
   font-size: 2rem;
+}
+
+a:has(.title) {
+  text-decoration: none;
 }
 </style>
