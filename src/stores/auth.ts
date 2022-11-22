@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { useLocalStorage } from "@vueuse/core";
 import { useJwt } from "@vueuse/integrations/useJwt";
+import type { ComputedRef } from "vue";
 
 interface LoginPayload {
   email: string;
@@ -11,6 +12,13 @@ interface SignupPayload extends LoginPayload {
   name: string;
   phone: string;
   address: string;
+}
+
+interface JwtPayload extends ComputedRef<JwtPayload | null> {
+  email: string;
+  iat: number;
+  exp: number;
+  permission_level: number;
 }
 
 export const useAuth = defineStore("auth", {
@@ -24,7 +32,7 @@ export const useAuth = defineStore("auth", {
     userHasData: (state) => state.user.token.length > 0,
     userData: (state) => {
       const { payload } = useJwt(state.user.token);
-      return payload.value;
+      return payload.value as JwtPayload;
     },
   },
 

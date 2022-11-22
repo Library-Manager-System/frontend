@@ -11,9 +11,7 @@ export default {
   }),
 
   async mounted() {
-    this.userPermissionLevel = this.authStore.userData![
-      "permission_level"
-    ] as number;
+    this.userPermissionLevel = this.authStore.userData!.permission_level;
   },
 
   components: {
