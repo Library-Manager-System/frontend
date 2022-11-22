@@ -1,6 +1,7 @@
 <script lang="ts">
 import { useAuth } from "@/stores/auth";
 import VanillaTilt from "vanilla-tilt";
+import ProtectedRoute from "@/components/ProtectedRoute.vue";
 
 export default {
   data: () => ({
@@ -27,11 +28,11 @@ export default {
 
     this.book = {
       title: json.title_book,
-      author: "",
-      publisher: "",
+      author: json.name_author.join(", "),
+      publisher: json.name_publisher.join(", "),
       year: json.year_book,
       synopsis: json.synopsis_book,
-      category: "",
+      category: json.name_category,
       copies: 1,
     };
 
@@ -49,41 +50,45 @@ export default {
       setTimeout(() => (this.loanError = ""), 5000);
     },
   },
+
+  components: { ProtectedRoute },
 };
 </script>
 
 <template>
-  <main>
-    <div class="book" data-tilt>
-      <img
-        :src="`https://covers.openlibrary.org/b/isbn/${$route.params.isbn}-L.jpg`"
-        :alt="book.title"
-      />
-    </div>
-    <div>
-      <h2>{{ book.title }}</h2>
-      <ul class="book-info">
-        <li><strong>ISBN: </strong>{{ $route.params.isbn }}</li>
-        <li><strong>Autor: </strong>{{ book.author }}</li>
-        <li><strong>Editora: </strong>{{ book.publisher }}</li>
-        <li><strong>Ano de publicação: </strong>{{ book.year }}</li>
-        <li><strong>Sinopse: </strong>{{ book.synopsis }}</li>
-        <li><strong>Categoria: </strong>{{ book.category }}</li>
-        <li><strong>Cópias disponíveis: </strong>{{ book.copies }}</li>
-      </ul>
-      <button
-        type="button"
-        @click="newLoan"
-        :class="
-          loanError.length > 0 ? 'button-error' : loan && 'button-disabled'
-        "
-      >
-        <span v-if="loanError.length > 0">{{ loanError }}</span>
-        <span v-else-if="loan">...</span>
-        <span v-else>Soliciar empréstimo</span>
-      </button>
-    </div>
-  </main>
+  <ProtectedRoute>
+    <main>
+      <div class="book" data-tilt>
+        <img
+          :src="`https://covers.openlibrary.org/b/isbn/${$route.params.isbn}-L.jpg`"
+          :alt="book.title"
+        />
+      </div>
+      <div>
+        <h2>{{ book.title }}</h2>
+        <ul class="book-info">
+          <li><strong>ISBN: </strong>{{ $route.params.isbn }}</li>
+          <li><strong>Autor: </strong>{{ book.author }}</li>
+          <li><strong>Editora: </strong>{{ book.publisher }}</li>
+          <li><strong>Ano de publicação: </strong>{{ book.year }}</li>
+          <li><strong>Sinopse: </strong>{{ book.synopsis }}</li>
+          <li><strong>Categoria: </strong>{{ book.category }}</li>
+          <li><strong>Cópias disponíveis: </strong>{{ book.copies }}</li>
+        </ul>
+        <button
+          type="button"
+          @click="newLoan"
+          :class="
+            loanError.length > 0 ? 'button-error' : loan && 'button-disabled'
+          "
+        >
+          <span v-if="loanError.length > 0">{{ loanError }}</span>
+          <span v-else-if="loan">...</span>
+          <span v-else>Soliciar empréstimo</span>
+        </button>
+      </div>
+    </main>
+  </ProtectedRoute>
 </template>
 
 <style scoped>
