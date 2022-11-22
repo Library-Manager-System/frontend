@@ -49,11 +49,15 @@ export default {
       if (this.isbn.length > 0) {
         const res = await this.authStore.protectedFetch(
           "/book/loan/request",
-          "GET",
-          { book_isbn: this.isbn }
+          "POST",
+          { isbn: this.isbn }
         );
 
-        console.log(res);
+        if (res instanceof Error || res === undefined) {
+          this.loanError = res.message;
+        } else {
+          alert("Empréstimo solicitado");
+        }
       }
 
       this.loanLoading = false;
