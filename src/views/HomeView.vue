@@ -1,61 +1,37 @@
 <script lang="ts">
 import ProtectedRoute from "@/components/ProtectedRoute.vue";
-import BookDetail from "@/components/BookDetail.vue";
-import SearchBar from "@/components/SearchBar.vue";
 import { useAuth } from "@/stores/auth";
-
-interface Book {
-  isbn: string;
-  title: string;
-}
+import UserHome from "../components/UserHome.vue";
+import LibrarianHome from "../components/LibrarianHome.vue";
 
 export default {
   data: () => ({
     authStore: useAuth(),
-    books: [{ isbn: "", title: "" } as Book],
-    booksFilter: [{ isbn: "", title: "" } as Book],
+    userPermissionLevel: 0,
   }),
 
-  methods: {
-    search(searchText: string) {
-      console.log(searchText);
-      this.booksFilter = this.books.filter((book) =>
-        book.title.toLowerCase().includes(searchText.toLowerCase())
-      );
-    },
-  },
-
   async mounted() {
-    const json = await this.authStore.protectedFetch("/book", "GET");
-
-    this.books = json.map(
-      (book: any) => ({ isbn: book.isbn_book, title: book.title_book } as Book)
-    );
-
-    this.booksFilter = this.books;
+    this.userPermissionLevel = this.authStore.userData![
+      "permission_level"
+    ] as number;
   },
 
   components: {
     ProtectedRoute,
-    BookDetail,
-    SearchBar,
+    UserHome,
+    LibrarianHome,
   },
 };
 </script>
 
 <template>
-  <ProtectedRoute>
-    <main>
-      <SearchBar @on-search="search" />
-      <div class="book-container">
-        <BookDetail
-          v-for="book of booksFilter"
-          :key="book.title"
-          :book="book"
-        />
-      </div>
-    </main>
-  </ProtectedRoute>
+  <main>
+    <ProtectedRoute>
+      <h2 v-if="userPermissionLevel === 0">Carregando...</h2>
+      <UserHome v-else-if="userPermissionLevel === 1" />
+      <LibrarianHome v-else-if="userPermissionLevel === 2" />
+    </ProtectedRoute>
+  </main>
 </template>
 
 <style scoped>
@@ -68,13 +44,5 @@ main {
   justify-content: flex-start;
   flex-grow: 1;
   gap: 2rem;
-}
-
-.book-container {
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 2rem;
-  padding: 1rem;
 }
 </style>

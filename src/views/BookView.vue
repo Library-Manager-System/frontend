@@ -6,6 +6,7 @@ import ProtectedRoute from "@/components/ProtectedRoute.vue";
 export default {
   data: () => ({
     authStore: useAuth(),
+    isbn: "",
     book: {
       title: "",
       author: "",
@@ -15,14 +16,14 @@ export default {
       category: "",
       copies: 0,
     },
-    loan: false,
+    loanLoading: false,
     loanError: "",
   }),
 
   async mounted() {
+    this.isbn = this.$route.params.isbn.toString();
     const json = await this.authStore.protectedFetch(
-      "/book/isbn?" +
-        new URLSearchParams({ isbn: this.$route.params.isbn.toString() }),
+      "/book/isbn?" + new URLSearchParams({ isbn: this.isbn }),
       "GET"
     );
 
@@ -43,11 +44,20 @@ export default {
   },
 
   methods: {
-    newLoan() {
-      this.loan = true;
-      setTimeout(() => (this.loan = false), 2000);
-      setTimeout(() => (this.loanError = "Erro"), 2000);
-      setTimeout(() => (this.loanError = ""), 5000);
+    async newLoan() {
+      this.loanLoading = true;
+
+      if (this.isbn.length > 0) {
+        const res = await this.authStore.protectedFetch(
+          "/book/loan/request",
+          "POST",
+          { book_isbn: this.isbn }
+        );
+
+        console.log(res);
+      }
+
+      this.loanLoading = false;
     },
   },
 
@@ -79,11 +89,13 @@ export default {
           type="button"
           @click="newLoan"
           :class="
-            loanError.length > 0 ? 'button-error' : loan && 'button-disabled'
+            loanError.length > 0
+              ? 'button-error'
+              : loanLoading && 'button-disabled'
           "
         >
           <span v-if="loanError.length > 0">{{ loanError }}</span>
-          <span v-else-if="loan">...</span>
+          <span v-else-if="loanLoading">Aguarde...</span>
           <span v-else>Soliciar empréstimo</span>
         </button>
       </div>
