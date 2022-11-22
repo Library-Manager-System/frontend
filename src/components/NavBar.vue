@@ -37,7 +37,7 @@ export default {
     <RouterLink :to="{ name: 'home' }">
       <h1 class="title">OLMS</h1>
     </RouterLink>
-    <div v-if="authStore.userAuthenticated">
+    <div v-if="authStore.userHasData">
       <NavMenuButton @toggle-menu="toggleMenu" />
       <NavMenu :menu-open="menuOpen" @toggle-menu="toggleMenu" />
     </div>

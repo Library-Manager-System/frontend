@@ -21,7 +21,7 @@ export const useAuth = defineStore("auth", {
   }),
 
   getters: {
-    userAuthenticated: (state) => state.user.token.length > 0,
+    userHasData: (state) => state.user.token.length > 0,
     userData: (state) => {
       const { payload } = useJwt(state.user.token);
       return payload.value;
@@ -116,6 +116,16 @@ export const useAuth = defineStore("auth", {
         }
       } catch (err) {
         return err;
+      }
+    },
+
+    async verifyLogin() {
+      const res = await this.protectedFetch("/user", "GET");
+      if (res instanceof Error || res === undefined) {
+        this.user.token = "";
+        return false;
+      } else {
+        return true;
       }
     },
   },

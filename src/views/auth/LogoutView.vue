@@ -18,6 +18,6 @@ export default {
 </script>
 
 <template>
-  <h2 v-if="authStore.userAuthenticated">Saindo...</h2>
+  <h2 v-if="authStore.userHasData">Saindo...</h2>
   <RedirectTo name="auth.login" v-else />
 </template>

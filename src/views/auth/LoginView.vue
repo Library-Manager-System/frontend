@@ -1,5 +1,5 @@
 <script lang="ts">
-import RedirectTo from "@/components/RedirectTo.vue";
+import ProtectedRoute from "@/components/ProtectedRoute.vue";
 import { useAuth } from "@/stores/auth";
 
 export default {
@@ -42,56 +42,57 @@ export default {
   },
 
   components: {
-    RedirectTo,
+    ProtectedRoute,
   },
 };
 </script>
 
 <template>
-  <RedirectTo name="home" v-if="authStore.userAuthenticated" />
-  <div class="login-form-container" v-else>
-    <h2>Entrar</h2>
-    <form @submit.prevent="submit">
-      <div>
-        <label htmlFor="input-email">Email:</label>
-        <br />
-        <input
-          type="email"
-          id="input-email"
-          placeholder="email@exemplo.com"
-          v-model="formData.email"
-          @input="resetAuthError"
-        />
-      </div>
-      <div>
-        <label htmlFor="input-password">Senha:</label>
-        <br />
-        <input
-          type="password"
-          id="input-password"
-          placeholder="**********"
-          v-model="formData.password"
-          @input="resetAuthError"
-        />
-      </div>
-      <button
-        type="submit"
-        :class="
-          authError.length > 0
-            ? 'button-error'
-            : authLoading && 'button-disabled'
-        "
-      >
-        <span v-if="authError.length > 0">{{ authError }}</span>
-        <span v-else-if="authLoading">...</span>
-        <span v-else>Continuar</span>
-      </button>
-    </form>
-    <span class="form-message">
-      Não tem uma conta?
-      <RouterLink :to="{ name: 'auth.signup' }">Inscreva-se</RouterLink>
-    </span>
-  </div>
+  <ProtectedRoute routeName="home" reverse>
+    <div class="login-form-container">
+      <h2>Entrar</h2>
+      <form @submit.prevent="submit">
+        <div>
+          <label htmlFor="input-email">Email:</label>
+          <br />
+          <input
+            type="email"
+            id="input-email"
+            placeholder="email@exemplo.com"
+            v-model="formData.email"
+            @input="resetAuthError"
+          />
+        </div>
+        <div>
+          <label htmlFor="input-password">Senha:</label>
+          <br />
+          <input
+            type="password"
+            id="input-password"
+            placeholder="**********"
+            v-model="formData.password"
+            @input="resetAuthError"
+          />
+        </div>
+        <button
+          type="submit"
+          :class="
+            authError.length > 0
+              ? 'button-error'
+              : authLoading && 'button-disabled'
+          "
+        >
+          <span v-if="authError.length > 0">{{ authError }}</span>
+          <span v-else-if="authLoading">...</span>
+          <span v-else>Continuar</span>
+        </button>
+      </form>
+      <span class="form-message">
+        Não tem uma conta?
+        <RouterLink :to="{ name: 'auth.signup' }">Inscreva-se</RouterLink>
+      </span>
+    </div>
+  </ProtectedRoute>
 </template>
 
 <style scoped>

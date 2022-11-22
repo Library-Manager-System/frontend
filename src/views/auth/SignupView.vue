@@ -1,5 +1,5 @@
 <script lang="ts">
-import RedirectTo from "@/components/RedirectTo.vue";
+import ProtectedRoute from "@/components/ProtectedRoute.vue";
 import { useAuth } from "@/stores/auth";
 
 export default {
@@ -53,102 +53,103 @@ export default {
   },
 
   components: {
-    RedirectTo,
+    ProtectedRoute,
   },
 };
 </script>
 
 <template>
-  <RedirectTo name="home" v-if="authStore.userAuthenticated" />
-  <div class="form-container" v-else>
-    <h2>Nova conta</h2>
-    <form @submit.prevent="submit">
-      <div class="form-input-container">
-        <div>
-          <label htmlFor="input-name">Nome:</label>
-          <br />
-          <input
-            type="text"
-            id="input-name"
-            placeholder="Nome completo"
-            v-model="formData.name"
-            @input="resetAuthError"
-          />
+  <ProtectedRoute routeName="home" reverse>
+    <div class="form-container">
+      <h2>Nova conta</h2>
+      <form @submit.prevent="submit">
+        <div class="form-input-container">
+          <div>
+            <label htmlFor="input-name">Nome:</label>
+            <br />
+            <input
+              type="text"
+              id="input-name"
+              placeholder="Nome completo"
+              v-model="formData.name"
+              @input="resetAuthError"
+            />
+          </div>
+          <div>
+            <label htmlFor="input-email">Email:</label>
+            <br />
+            <input
+              type="email"
+              id="input-email"
+              placeholder="email@exemplo.com"
+              v-model="formData.email"
+              @input="resetAuthError"
+            />
+          </div>
+          <div>
+            <label htmlFor="input-password">Senha:</label>
+            <br />
+            <input
+              type="password"
+              id="input-password"
+              placeholder="**********"
+              v-model="formData.password"
+              @input="resetAuthError"
+            />
+          </div>
+          <div>
+            <label htmlFor="input-password-confirm">Confirme sua senha:</label>
+            <br />
+            <input
+              type="password"
+              id="input-password-confirm"
+              placeholder="**********"
+              v-model="formData.passwordConfirm"
+              @input="resetAuthError"
+            />
+          </div>
+          <div>
+            <label htmlFor="input-phone">Número de telefone:</label>
+            <br />
+            <input
+              type="tel"
+              id="input-phone"
+              placeholder="99999999999"
+              v-model="formData.phone"
+              @input="resetAuthError"
+            />
+          </div>
+          <div>
+            <label htmlFor="input-address">Endereço:</label>
+            <br />
+            <input
+              type="text"
+              id="input-address"
+              placeholder="..."
+              v-model="formData.address"
+              @input="resetAuthError"
+            />
+          </div>
         </div>
-        <div>
-          <label htmlFor="input-email">Email:</label>
-          <br />
-          <input
-            type="email"
-            id="input-email"
-            placeholder="email@exemplo.com"
-            v-model="formData.email"
-            @input="resetAuthError"
-          />
-        </div>
-        <div>
-          <label htmlFor="input-password">Senha:</label>
-          <br />
-          <input
-            type="password"
-            id="input-password"
-            placeholder="**********"
-            v-model="formData.password"
-            @input="resetAuthError"
-          />
-        </div>
-        <div>
-          <label htmlFor="input-password-confirm">Confirme sua senha:</label>
-          <br />
-          <input
-            type="password"
-            id="input-password-confirm"
-            placeholder="**********"
-            v-model="formData.passwordConfirm"
-            @input="resetAuthError"
-          />
-        </div>
-        <div>
-          <label htmlFor="input-phone">Número de telefone:</label>
-          <br />
-          <input
-            type="tel"
-            id="input-phone"
-            placeholder="99999999999"
-            v-model="formData.phone"
-            @input="resetAuthError"
-          />
-        </div>
-        <div>
-          <label htmlFor="input-address">Endereço:</label>
-          <br />
-          <input
-            type="text"
-            id="input-address"
-            placeholder="..."
-            v-model="formData.address"
-            @input="resetAuthError"
-          />
-        </div>
-      </div>
-      <button
-        type="submit"
-        :class="
-          authError.length > 0
-            ? 'button-error'
-            : authLoading && 'button-disabled'
-        "
-      >
-        <span v-if="authError.length > 0">{{ authError }}</span>
-        <span v-else-if="authLoading">...</span>
-        <span v-else>Continuar</span>
-      </button>
-    </form>
-    <span class="form-message">
-      Já tem uma conta?
-      <RouterLink :to="{ name: 'auth.login' }">Entrar</RouterLink>
-    </span>
-  </div>
+        <button
+          type="submit"
+          :class="
+            authError.length > 0
+              ? 'button-error'
+              : authLoading && 'button-disabled'
+          "
+        >
+          <span v-if="authError.length > 0">{{ authError }}</span>
+          <span v-else-if="authLoading">...</span>
+          <span v-else>Continuar</span>
+        </button>
+      </form>
+      <span class="form-message">
+        Já tem uma conta?
+        <RouterLink :to="{ name: 'auth.login' }">Entrar</RouterLink>
+      </span>
+    </div>
+  </ProtectedRoute>
 </template>
 
 <style scoped>
