@@ -98,14 +98,19 @@ export const useAuth = defineStore("auth", {
       if (this.user.token.length < 1) return;
 
       try {
-        const res = await fetch(import.meta.env.VITE_API_URL + path, {
-          method: method,
-          headers: {
-            Authorization: "Bearer " + this.user.token,
-            "Content-Type": "application/json",
-          },
-          body: method === "POST" ? JSON.stringify(payload) : null,
-        });
+        const res = await fetch(
+          import.meta.env.VITE_API_URL +
+            path +
+            (method === "GET" ? "?" + new URLSearchParams({ ...payload }) : ""),
+          {
+            method: method,
+            headers: {
+              Authorization: "Bearer " + this.user.token,
+              "Content-Type": "application/json",
+            },
+            body: method === "POST" ? JSON.stringify(payload) : null,
+          }
+        );
 
         const json = await res.json();
 

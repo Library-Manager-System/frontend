@@ -22,10 +22,9 @@ export default {
 
   async mounted() {
     this.isbn = this.$route.params.isbn.toString();
-    const json = await this.authStore.protectedFetch(
-      "/book/isbn?" + new URLSearchParams({ isbn: this.isbn }),
-      "GET"
-    );
+    const json = await this.authStore.protectedFetch("/book/isbn", "GET", {
+      isbn: this.isbn,
+    });
 
     this.book = {
       title: json.title_book,
@@ -50,7 +49,7 @@ export default {
       if (this.isbn.length > 0) {
         const res = await this.authStore.protectedFetch(
           "/book/loan/request",
-          "POST",
+          "GET",
           { book_isbn: this.isbn }
         );
 
