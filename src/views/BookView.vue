@@ -33,7 +33,7 @@ export default {
       year: json.year_book,
       synopsis: json.synopsis_book,
       category: json.name_category,
-      copies: 1,
+      copies: json.available_copy,
     };
 
     VanillaTilt.init(document.querySelector(".book") as HTMLElement, {

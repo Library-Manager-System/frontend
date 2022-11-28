@@ -10,4 +10,5 @@ interface Loan {
   isbn: string;
   title: string;
   email: string;
+  returned_loan?: boolean;
 }

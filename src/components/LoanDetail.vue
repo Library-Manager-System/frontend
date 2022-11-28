@@ -15,24 +15,24 @@ export default defineComponent({
   }),
 
   methods: {
+    emitRefresh() {
+      this.$emit("refresh");
+    },
+
     authorizeLoan() {
       this.authStore
         .protectedFetch("/book/loan/authorize", "POST", {
           loan_id: this.loan.id_loan,
         })
-        .then(() => {
-          this.$router.go(0);
-        });
+        .then(() => this.emitRefresh());
     },
 
     returnLoan() {
       this.authStore
-        .protectedFetch("/book/loan/authorize", "POST", {
+        .protectedFetch("/book/loan/return", "POST", {
           loan_id: this.loan.id_loan,
         })
-        .then(() => {
-          this.$router.go(0);
-        });
+        .then(() => this.emitRefresh());
     },
   },
 });
@@ -46,10 +46,20 @@ export default defineComponent({
       <strong>{{ loan.email }}</strong>
       <span> em </span>
       <strong>{{ new Date(loan.dt_loan).toLocaleDateString() }}</strong>
+      <span> - Status: </span>
+      <strong>{{
+        loan.approved_loan
+          ? loan.returned_loan
+            ? "Devolvido"
+            : "Aprovado"
+          : "Aguardando aprovação"
+      }}</strong>
     </span>
     <div>
-      <button @click="authorizeLoan">Aprovar</button>
-      <button @click="returnLoan">Recusar</button>
+      <button @click="authorizeLoan" v-if="!loan.approved_loan">Aprovar</button>
+      <button @click="returnLoan" v-else-if="!loan.returned_loan">
+        Devolver
+      </button>
     </div>
   </div>
 </template>
