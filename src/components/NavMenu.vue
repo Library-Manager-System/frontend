@@ -2,6 +2,12 @@
 import { useAuth } from "@/stores/auth";
 import { RouterLink } from "vue-router";
 
+interface Route {
+  label: string;
+  name: string;
+  show: boolean;
+}
+
 export default {
   props: {
     menuOpen: {
@@ -16,22 +22,39 @@ export default {
       {
         label: "Página inicial",
         name: "home",
+        show: true,
+      },
+      {
+        label: "Área do bibliotecário",
+        name: "librarian",
+        show: useAuth().userData!.permission_level >= 2,
       },
       {
         label: "Configurações",
         name: "settings",
+        show: true,
       },
       {
         label: "Sair",
         name: "auth.logout",
+        show: true,
       },
-    ],
+    ] as Route[],
+    filteredRoutes: [] as Route[],
   }),
 
   methods: {
     closeMenu() {
       this.$emit("toggleMenu");
     },
+
+    filterRoutes() {
+      this.filteredRoutes = this.routes.filter((route) => route.show);
+    },
+  },
+
+  mounted() {
+    this.filterRoutes();
   },
 
   components: {
@@ -45,7 +68,7 @@ export default {
     <div class="nav-menu">
       <span @click="closeMenu" class="menu-item">Fechar</span>
       <RouterLink
-        v-for="route in routes"
+        v-for="route in filteredRoutes"
         :key="route.name"
         :to="{ name: route.name }"
         @click="closeMenu"
