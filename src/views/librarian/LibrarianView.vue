@@ -2,7 +2,8 @@
 import ProtectedRoute from "@/components/ProtectedRoute.vue";
 import { useAuth } from "@/stores/auth";
 import { defineComponent } from "vue";
-import LoanDetail from "./LoanDetail.vue";
+import LoanDetail from "@/components/LoanDetail.vue";
+import PermissionLevel from "@/components/PermissionLevel.vue";
 
 export default defineComponent({
   data: () => ({
@@ -34,18 +35,21 @@ export default defineComponent({
   components: {
     ProtectedRoute,
     LoanDetail,
+    PermissionLevel,
   },
 });
 </script>
 
 <template>
   <ProtectedRoute>
-    <h2>Empréstimos</h2>
-    <ul v-if="loans.length > 0" class="loan-list">
-      <li v-for="loan of loans" :key="loan.id_loan" class="loan-item">
-        <LoanDetail :loan="loan" @refresh="fetchLoans" />
-      </li>
-    </ul>
+    <PermissionLevel :permission-level="2">
+      <h2>Empréstimos</h2>
+      <ul v-if="loans.length > 0" class="loan-list">
+        <li v-for="loan of loans" :key="loan.id_loan" class="loan-item">
+          <LoanDetail :loan="loan" @refresh="fetchLoans" />
+        </li>
+      </ul>
+    </PermissionLevel>
   </ProtectedRoute>
 </template>
 

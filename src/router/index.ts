@@ -40,6 +40,11 @@ const router = createRouter({
       name: "book",
       component: () => import("@/views/BookView.vue"),
     },
+    {
+      path: "/librarian",
+      name: "librarian",
+      component: () => import("@/views/librarian/LibrarianView.vue"),
+    },
   ],
 });
 
