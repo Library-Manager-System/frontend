@@ -18,32 +18,29 @@ export default {
     },
     loanLoading: false,
     loanError: "",
+    loanMessage: "",
   }),
 
-  async mounted() {
-    this.isbn = this.$route.params.isbn.toString();
-    const json = await this.authStore.protectedFetch("/book/isbn", "GET", {
-      isbn: this.isbn,
-    });
-
-    this.book = {
-      title: json.title_book,
-      author: json.name_author.join(", "),
-      publisher: json.name_publisher.join(", "),
-      year: json.year_book,
-      synopsis: json.synopsis_book,
-      category: json.name_category,
-      copies: json.available_copy,
-    };
-
-    VanillaTilt.init(document.querySelector(".book") as HTMLElement, {
-      reverse: true,
-      max: 5,
-    });
-  },
-
   methods: {
+    async fetchBookData() {
+      const json = await this.authStore.protectedFetch("/book/isbn", "GET", {
+        isbn: this.isbn,
+      });
+
+      this.book = {
+        title: json.title_book,
+        author: json.name_author.join(", "),
+        publisher: json.name_publisher.join(", "),
+        year: json.year_book,
+        synopsis: json.synopsis_book,
+        category: json.name_category,
+        copies: json.available_copy,
+      };
+    },
+
     async newLoan() {
+      if (this.loanMessage.length > 0) return;
+
       this.loanLoading = true;
 
       if (this.isbn.length > 0) {
@@ -56,12 +53,24 @@ export default {
         if (res instanceof Error || res === undefined) {
           this.loanError = res.message;
         } else {
-          alert("Empréstimo solicitado");
+          this.loanMessage = "Empréstimo solicitado";
         }
       }
 
+      this.fetchBookData();
       this.loanLoading = false;
     },
+  },
+
+  async mounted() {
+    this.isbn = this.$route.params.isbn.toString();
+
+    this.fetchBookData();
+
+    VanillaTilt.init(document.querySelector(".book") as HTMLElement, {
+      reverse: true,
+      max: 5,
+    });
   },
 
   components: { ProtectedRoute },
@@ -94,10 +103,13 @@ export default {
           :class="
             loanError.length > 0
               ? 'button-error'
-              : loanLoading && 'button-disabled'
+              : loanLoading
+              ? 'button-disabled'
+              : loanMessage.length > 0 && 'loan-success'
           "
         >
-          <span v-if="loanError.length > 0">{{ loanError }}</span>
+          <span v-if="loanMessage.length > 0">{{ loanMessage }}</span>
+          <span v-else-if="loanError.length > 0">{{ loanError }}</span>
           <span v-else-if="loanLoading">Aguarde...</span>
           <span v-else>Soliciar empréstimo</span>
         </button>
@@ -169,6 +181,15 @@ button:active {
   box-shadow: none;
   transform: none;
   cursor: wait;
+}
+
+.loan-success,
+.loan-success:hover,
+.loan-success:active {
+  box-shadow: none;
+  transform: none;
+  cursor: default;
+  opacity: 0.8;
 }
 
 @media screen and (max-width: 768px) {
