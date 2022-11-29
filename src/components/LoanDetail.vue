@@ -57,7 +57,7 @@ export default defineComponent({
         <br />
         <span>
           <strong>Solicitado por: </strong>
-          <a :href="`mailto:${loan.email}`">
+          <a :href="`mailto:${loan.email}`" target="_blank" class="link">
             {{ loan.email }}
           </a>
         </span>
@@ -69,13 +69,23 @@ export default defineComponent({
         <br />
         <span>
           <strong>Status: </strong>
-          {{
-            loan.approved_loan
-              ? loan.returned_loan
-                ? "Devolvido"
-                : "Aprovado"
-              : "Aguardando aprovação"
-          }}
+          <span
+            :class="
+              loan.approved_loan
+                ? loan.returned_loan
+                  ? 'text-green'
+                  : 'text-red'
+                : 'text-orange'
+            "
+          >
+            {{
+              loan.approved_loan
+                ? loan.returned_loan
+                  ? "Devolvido"
+                  : "Devolução pendente"
+                : "Aguardando aprovação"
+            }}
+          </span>
         </span>
         <br /><br />
         <button @click="authorizeLoan" v-if="!loan.approved_loan">
@@ -154,6 +164,22 @@ button:active {
 
 .button-disabled {
   cursor: default;
+}
+
+.text-green {
+  color: var(--sucess-color);
+}
+
+.text-red {
+  color: var(--error-color);
+}
+
+.text-orange {
+  color: rgb(255, 90, 14);
+}
+
+.link {
+  color: rgb(48, 120, 255);
 }
 
 @media screen and (max-width: 768px) {
