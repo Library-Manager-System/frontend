@@ -100,7 +100,7 @@ export const useAuth = defineStore("auth", {
 
     async protectedFetch(
       path: string,
-      method: "GET" | "POST" = "POST",
+      method: "GET" | "POST" | "PUT" = "POST",
       payload: object = {}
     ) {
       if (this.user.token.length < 1) return;
@@ -109,7 +109,9 @@ export const useAuth = defineStore("auth", {
         const res = await fetch(
           import.meta.env.VITE_API_URL +
             path +
-            (method === "GET" ? "?" + new URLSearchParams({ ...payload }) : ""),
+            (["GET", "PUT"].includes(method)
+              ? "?" + new URLSearchParams({ ...payload })
+              : ""),
           {
             method: method,
             headers: {

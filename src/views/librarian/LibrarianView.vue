@@ -27,15 +27,10 @@ export default defineComponent({
           </RouterLink>
         </li>
         <li>
-          <RouterLink to="#">Usuários</RouterLink>
+          <RouterLink :to="{ name: 'librarian.users' }"> Usuários</RouterLink>
         </li>
         <li>
           <RouterLink to="#">Livros</RouterLink>
-        </li>
-        <li>
-          <RouterLink :to="{ name: 'settings' }">
-            Configurações da conta
-          </RouterLink>
         </li>
       </ul>
     </PermissionLevel>
@@ -46,6 +41,7 @@ export default defineComponent({
 ul {
   list-style: none;
   padding-left: 0;
+  text-align: center;
 }
 
 a {

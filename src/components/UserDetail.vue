@@ -4,9 +4,9 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   props: {
-    loan: {
+    user: {
       required: true,
-      type: Object as () => Loan,
+      type: Object as () => User,
     },
   },
 
@@ -19,19 +19,15 @@ export default defineComponent({
       this.$emit("refresh");
     },
 
-    authorizeLoan() {
+    authorizeUser() {
+      if (
+        !confirm(
+          `Confirmar o cadastro de ${this.user.name} (${this.user.email})?`
+        )
+      )
+        return;
       this.authStore
-        .protectedFetch("/book/loan/authorize", "POST", {
-          loan_id: this.loan.id_loan,
-        })
-        .then(() => this.emitRefresh());
-    },
-
-    returnLoan() {
-      this.authStore
-        .protectedFetch("/book/loan/return", "POST", {
-          loan_id: this.loan.id_loan,
-        })
+        .protectedFetch("/user/confirm", "PUT", { email: this.user.email })
         .then(() => this.emitRefresh());
     },
   },
@@ -41,64 +37,39 @@ export default defineComponent({
 <template>
   <div class="loan-detail">
     <div class="book-container">
-      <img
-        :src="`https://covers.openlibrary.org/b/isbn/${loan.isbn}-M.jpg`"
-        :alt="loan.title"
-        loading="lazy"
-        class="book-cover"
-      />
       <div>
-        <strong>{{ loan.title }}</strong>
+        <strong>{{ user.name }}</strong>
         <br /><br />
         <span>
-          <strong>ISBN: </strong>
-          {{ loan.isbn }}
-        </span>
-        <br />
-        <span>
-          <strong>Solicitado por: </strong>
-          <a :href="`mailto:${loan.email}`" target="_blank" class="link">
-            {{ loan.email }}
+          <strong>Email: </strong>
+          <a :href="`mailto:${user.email}`" target="_blank" class="link">
+            {{ user.email }}
           </a>
         </span>
         <br />
         <span>
-          <strong>Solicitado em: </strong>
-          {{ new Date(loan.dt_loan).toLocaleDateString() }}
-        </span>
+          <strong>Tipo: </strong>
+          {{
+            user.type === 3
+              ? "Administrador"
+              : user.type === 2
+              ? "Bibliotecário"
+              : "Usuário"
+          }}</span
+        >
         <br />
         <span>
           <strong>Status: </strong>
-          <span
-            :class="
-              loan.approved_loan
-                ? loan.returned_loan
-                  ? 'text-green'
-                  : 'text-red'
-                : 'text-orange'
-            "
-          >
+          <span>
             {{
-              loan.approved_loan
-                ? loan.returned_loan
-                  ? "Devolvido"
-                  : "Devolução pendente"
-                : "Aguardando aprovação"
+              user.confirmed_account === 1 ? "Aprovado" : "Aguardando aprovação"
             }}
           </span>
         </span>
-        <br /><br />
-        <button @click="authorizeLoan" v-if="!loan.approved_loan">
-          Aprovar
-        </button>
-        <button
-          @click="returnLoan"
-          class="button-error"
-          v-else-if="!loan.returned_loan"
-        >
-          Devolver
-        </button>
-        <button class="button-disabled" v-else>Devolvido</button>
+        <div v-if="user.confirmed_account === 0">
+          <br />
+          <button @click="authorizeUser">Aprovar cadastro</button>
+        </div>
       </div>
     </div>
   </div>
@@ -114,7 +85,7 @@ export default defineComponent({
   border: 1px solid var(--shadow-color);
   background-color: #fff;
   box-shadow: 2px 2px 0px var(--shadow-color);
-  width: 400px;
+  width: 300px;
 }
 
 .book-container {
@@ -122,12 +93,6 @@ export default defineComponent({
   align-items: center;
   justify-content: center;
   gap: 1rem;
-}
-
-.book-cover {
-  width: 120px;
-  height: 180px;
-  border: 1px solid var(--shadow-color);
 }
 
 button {

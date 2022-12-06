@@ -22,7 +22,6 @@ export default defineComponent({
 
   methods: {
     search(searchText: string) {
-      console.log(searchText);
       this.booksFilter = this.books.filter((book) =>
         book.title.toLowerCase().includes(searchText.toLowerCase())
       );

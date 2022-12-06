@@ -13,6 +13,10 @@ export default defineComponent({
   }),
 
   methods: {
+    emitRefresh() {
+      this.$emit("refresh");
+    },
+
     async fetchLoans() {
       const res: Loan[] = await this.authStore.protectedFetch(
         "/book/loan/list/all",

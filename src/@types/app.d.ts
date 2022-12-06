@@ -12,3 +12,11 @@ interface Loan {
   email: string;
   returned_loan?: boolean;
 }
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  confirmed_account: number;
+  type: number;
+}
