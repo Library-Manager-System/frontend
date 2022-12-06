@@ -45,6 +45,11 @@ const router = createRouter({
       name: "librarian",
       component: () => import("@/views/librarian/LibrarianView.vue"),
     },
+    {
+      path: "/librarian/loans",
+      name: "librarian.loans",
+      component: () => import("@/views/librarian/LoanView.vue"),
+    },
   ],
 });
 
