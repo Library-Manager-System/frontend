@@ -3,6 +3,7 @@ import BookDetail from "@/components/BookDetail.vue";
 import PermissionLevel from "@/components/PermissionLevel.vue";
 import ProtectedRoute from "@/components/ProtectedRoute.vue";
 import SearchBar from "@/components/SearchBar.vue";
+import ViewContainer from "@/components/ViewContainer.vue";
 import { useAuth } from "@/stores/auth";
 import { defineComponent } from "vue";
 
@@ -43,6 +44,7 @@ export default defineComponent({
     SearchBar,
     ProtectedRoute,
     PermissionLevel,
+    ViewContainer,
   },
 });
 </script>
@@ -50,14 +52,16 @@ export default defineComponent({
 <template>
   <ProtectedRoute>
     <PermissionLevel :permission-level="1">
-      <SearchBar @on-search="search" />
-      <div class="book-container">
-        <BookDetail
-          v-for="book of booksFilter"
-          :key="book.title"
-          :book="book"
-        />
-      </div>
+      <ViewContainer>
+        <SearchBar @on-search="search" />
+        <div class="book-container">
+          <BookDetail
+            v-for="book of booksFilter"
+            :key="book.title"
+            :book="book"
+          />
+        </div>
+      </ViewContainer>
     </PermissionLevel>
   </ProtectedRoute>
 </template>

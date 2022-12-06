@@ -4,6 +4,7 @@ import { useAuth } from "@/stores/auth";
 import { defineComponent } from "vue";
 import LoanDetail from "@/components/LoanDetail.vue";
 import PermissionLevel from "@/components/PermissionLevel.vue";
+import ViewContainer from "@/components/ViewContainer.vue";
 
 export default defineComponent({
   data: () => ({
@@ -36,6 +37,7 @@ export default defineComponent({
     ProtectedRoute,
     LoanDetail,
     PermissionLevel,
+    ViewContainer,
   },
 });
 </script>
@@ -43,15 +45,17 @@ export default defineComponent({
 <template>
   <ProtectedRoute>
     <PermissionLevel :permission-level="2">
-      <h2>Empréstimos</h2>
-      <div v-if="loans.length > 0" class="loan-container">
-        <LoanDetail
-          v-for="loan of loans"
-          :key="loan.id_loan"
-          :loan="loan"
-          @refresh="fetchLoans"
-        />
-      </div>
+      <ViewContainer>
+        <h2>Empréstimos</h2>
+        <div v-if="loans.length > 0" class="loan-container">
+          <LoanDetail
+            v-for="loan of loans"
+            :key="loan.id_loan"
+            :loan="loan"
+            @refresh="fetchLoans"
+          />
+        </div>
+      </ViewContainer>
     </PermissionLevel>
   </ProtectedRoute>
 </template>
